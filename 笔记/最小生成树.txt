@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int N = 1e6;
+const int mod = 1e9 + 7;
+struct P{
+    int x,y,w;
+    bool operator< (P &W)const{
+        return w > W.w;//最大生成树
+    }
+}k[N];
+int n,m;
+ll res = 0;
+ll cnt = 0;
+int fa[N];
+int find(int x){
+    return fa[x] == x ? fa[x] : fa[x] = find(fa[x]);
+}
+bool whp(){
+    for(int i = 1; i <= n+200 ; i++)fa[i] = i;
+    sort(k + 1,k + 1 + m);
+    for(int i = 1; i <= m ; i++){
+        int a = find(k[i].x),b = find(k[i].y);
+        ll c = k[i].w;
+        if(a!=b){
+            fa[a] = b;
+            res += c;
+            cnt++;
+        }
+    }
+    if(cnt != n - 1)return false;
+    return true;
+}
+
+int tmp = 0;
+int main(){
+	cin >> n >>m;
+    ll sum = 0;
+    for(int i = 1; i <= m ;i ++){
+        int a,b,c;
+        cin >> a >> b >>c;
+        k[i] = {a,b,c};
+        sum += c;
+    }
+	if(whp())cout <<sum -  res<< endl;
+    else cout << -1 <<endl;
+		
+	return 0;
+}

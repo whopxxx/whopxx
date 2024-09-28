@@ -1,0 +1,40 @@
+//单源最短路——dijkstra O(n^2)
+//dis[1] = 0,dis[i] = inf;  起点是1
+
+#include<bits/stdc++.h>
+using namespace std;
+const int N =500;
+int n,m;
+int g[N][N];//存图稠密图
+bool vis[N];///判断某一点的最短距离是否确定过
+int dist[N];//某一点i到起点的距离
+int dijkstra(){
+    memset(dist,0x3f,sizeof dist);
+    dist[1] = 0;//起点确定为0
+    for(int i = 1; i <= n ; i++){//n次循环certain
+        int t = -1;
+        for(int j = 1; j <= n ; j++){
+            if(!vis[j] && (t == -1 || dist[t] > dist[j]))
+                t = j;//找到一个距离起点距离最小的值
+        }
+        vis[t] = true;
+        for(int j = 1; j <= n; j++){//第二步遍历更新从t到每一个点的最小代价
+            dist[j] = min(dist[j], dist[t] + g[t][j]);//从j到t的代价最小值
+        }
+        //n次循环确定n个点
+    }
+    return dist[n] == 0x3f3f3f3f ? -1 : dist[n];//n为终点的情况 
+    
+}
+
+int main(){
+    memset(g,0x3f,sizeof g);//权值初始最大
+    scanf("%d%d",&n,&m);
+    for(int i = 1; i <= m ; i++){
+        int a,b,w;
+        scanf("%d%d%d",&a,&b,&w);
+        g[a][b] = min(g[a][b],w);
+    }
+    printf("%d\n",dijkstra());
+    return 0;
+}

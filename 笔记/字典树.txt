@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+// #define x first
+// #define y second
+#define IOS ios::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define Y() puts("Yes")
+#define N() puts("No")
+#define endl '\n'
+using ll = long long;
+using ull = unsigned long long;
+using pii = pair<int,int>;
+const int N = 3000005;
+const int mod = 1e9 + 7;
+//字典树
+int son[N][65],idx;
+int cnt[N];
+char str[N];
+int get(char c){
+    if(c >= '0' && c <= '9')return c - '0' + 52;
+    else if(c >= 'a' && c <= 'z')return c - 'a' + 26;
+    else return c -'A';
+}
+void insert(char str[]){
+    int p = 0;
+    for(int i = 0 ; str[i]; i++){
+        int u = get(str[i]);
+        if(!son[p][u])son[p][u] = ++idx;
+        p = son[p][u];
+        cnt[p]++;
+    }
+}
+int query(char str[]){
+    int p = 0;
+    for(int i = 0; str[i];i++){
+        int u = get(str[i]);
+        if(!son[p][u])return 0;
+        p = son[p][u];
+    }
+    return cnt[p];
+}
+
+void solve(){
+    for(int i=0;i<=idx;i++)
+        for(int j=0;j<65;j++)
+            son[i][j]=0;
+    for(int i=0;i<=idx;i++)
+        cnt[i]=0;
+    idx = 0;
+    int n,m;
+    scanf("%d%d",&n,&m);
+    for(int i = 1; i <= n ; i++){
+        scanf("%s",str);
+        insert(str);
+    }
+    while(m--){
+        scanf("%s",str);
+        printf("%d\n",query(str));
+    }
+
+}
+
+int main(){
+    int _;
+    _ = 1;
+    scanf("%d",&_);
+    while( _ --){
+        solve();
+    }
+    return 0;
+}

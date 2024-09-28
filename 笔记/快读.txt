@@ -1,0 +1,26 @@
+inline int read(){
+    int x=0,f=1;
+    char ch=getchar();
+    while(ch<'0'||ch>'9'){
+        if(ch=='-')
+            f=-1;
+        ch=getchar();
+    }
+    while(ch>='0'&&ch<='9'){
+        x=(x<<1)+(x<<3)+(ch^48);
+        ch=getchar();
+    }
+    return x*f;
+}
+
+
+
+struct reader {
+	template <typename Type>
+	reader&operator>> (Type&ret) {
+		register int f = 1; ret = 0; register char ch = getchar ();
+		for (;!isdigit (ch); ch = getchar ()) if (ch=='-') f=-f;
+		for (; isdigit (ch); ch = getchar ()) ret = (ret << 1) + (ret << 3) + ch - '0';
+		ret *= f; return *this;
+	}
+}fin; // 快读 

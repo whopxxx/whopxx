@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int exgcd(int a,int b,int &x,int &y){
+    if(!b){
+        x = 1,y = 0;
+        return a;
+    }
+    int d = exgcd(b,a%b,y,x);
+    y -= a/b*x;
+    return d;
+}
+// ax + by = gcd(a, b) = gcd(b, a%b)
+// = bx + (a % b)y
+// = bx + (a - b*a/b)y
+// = bx + ay - b*a/b*y
+// x2 = y  y2 = x - a/b*y
+int main(){
+    int a,b,x,y;
+    cin >> a >> b;
+    printf("%d * %d + %d * %d = gcd(%d,%d) = %d",a,x,b,y,a,b,exgcd(a,b,x,y));
+
+    return 0;
+}

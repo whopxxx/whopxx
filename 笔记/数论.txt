@@ -1,0 +1,169 @@
+1.整除
+n | d  记为d整除n n/d为整数（n非负整数0, 1, 2... ，d正整数
+d为n的约数，因数或因子
+
+
+1.1最大公约数gcd(a,b)
+有a,b   最大的公约数d  d|a d|b 最大公约（因）数
+gcd(a,b) 
+gcd(a,b) = gcd(b,a);
+
+gcd(a,b) = 1 互质
+gcd(0,0)不存在（因为可以是任何整数
+gcd(0,a) = a
+
+gcd(a,b) = gcd(b, a - b)
+gcd(b,a) = gcd(b, a mod b)
+
+int gcd(int a, int b){
+    return b ? gcd(b, a%b) : a;
+}
+//log(max(a,b));
+
+1.2最小公倍数lcm(a,b)
+a|m b|m  则m 为a,b公倍数
+
+a = p * d
+b = q * d
+a*b/d = pqd为ab的倍数
+要使最小 d最大
+
+lcm(a,b) = a*b/gcd(a,b)
+//代码实现中为了避免溢出，先除再乘
+a/gcd(a,b)  * b
+
+2.质数
+n >= 2 为整数  1 < k < n的整数k都不是n的约数
+称质数（素数
+反之 合数
+
+π(n) 为不大于n的质数的个数
+π(n) = O(n/log(n))
+
+2.1唯一分解定理（算数基本定理
+分解质因数
+
+code 1:暴力
+vector<int>factor(int n){
+    vector<int>f;
+    for(int i = 2; i <= n ; i++){
+        while(n%i == 0){
+            f.push_back(i);
+            n /= i;
+        }
+    }
+    return f;
+}
+//O(log(log(n)))
+
+code 2:
+vector<int>factor(int n){
+    vector<int>f;
+    for(int i = 2; i*i <= n; i++){
+        while(n%i == 0){
+            f.push_back(i);
+            n /= i;
+        }
+    }
+    if(n > 1)f.push_back(n);
+    return f;
+}
+
+code 3:
+vector<int>p;//预处理质数
+vector<int> factor(int n){
+    vector<int>f;
+    for(int i = 0 ; i < p.size(); i++){
+        if(p[i]*p[i] > n)break;
+        while(n % p[i] == 0){
+            f.push_back(p[i]);
+            n /= p[i];
+        }
+    }
+    if(n > 1)f.push_back(n);
+    return f;
+}
+
+2.1质数筛
+筛法1
+bool vis[N + 1];
+vector<int>p;
+void sieve(){
+    for(int i = 2; i <= N ;i++){
+        if(!vis[i])p.push_back(i);
+        for(int j = i * 2; j <= N ;j += i){
+            vis[j] = 1;
+        }
+    }
+}
+
+筛法2
+const int N = 100010;
+bool vis[N + 1];
+vector<int>q;
+void whp(){
+    for(int i = 2; i <= N; i++){
+        if(!vis[i]){
+           q.push_back(i);
+           for(int j = i * 2; j <= N; j += i){
+                vis[j] = 1;
+           } 
+        }
+    }
+}
+
+线性筛（欧拉筛 O(n)
+const int N = 100010;
+bool vis[N + 1];
+vector<int>p;
+void sieve(){
+    for(int i = 2; i <= N ;i++){
+        if(!vis[i]){
+            p.push_back(i);
+        }
+        for(int j = 0; i*p[j] <= N ; j++){
+                vis[i*p[j]] = 1;
+                if(i % p[j] == 0)break;
+        }
+    }
+}
+
+
+3.积性函数
+如果 f[1] = 1;
+对于互质a,b有f[ab] = f[a][b] f[n]称积性函数
+
+对于不要求a,b互质，f[n]称完全积性函数
+
+code :在线性筛过程中计算积性函数
+bool vis[N];
+
+
+
+4.取模
+a n 
+a mod n = 
+a>=0   a-(a/n)*n;
+a<0    -(-a mod n);
+
+同余
+(a - b) mod n == 0   a,b同余
+a mod n = b mod (a,b > 0)
+
+a mod n = (a mod kn) mod n 对n的倍数取模
+k | a  a被k整除
+a/k mod n = (a mod kn)/k
+//取模优化
+tmplate<class T>
+inline T mod(T a){
+    return a < p ? a : a - p;
+}
+
+
+模乘法的逆元
+a*b mod n = 1
+b 为 a mod n 的逆元 
+gcd(a,n) = 1时，a mod n逆元存在
+
+费马小定理
+???

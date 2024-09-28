@@ -1,0 +1,48 @@
+//高精度加法
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+ 
+ 
+using namespace std;
+ 
+ 
+vector<int>add(vector<int>& A, vector<int>& B) {
+	if (A.size() < B.size())return add(B, A); //选大数
+ 
+	vector<int>C;
+	int t = 0;
+	for (int i = 0; i < A.size(); i++) { //相当于列竖式，不过是反向从个位开始加
+		t += A[i];
+		if (i < B.size())t += B[i];//相同位数字相加
+		C.push_back(t % 10);
+		t /= 10;
+ 
+	}
+	if (t)C.push_back(t); 
+	reverse(C.begin(), C.end());//  反转数字
+	return C;
+ 
+}
+ 
+ 
+int main() {
+	vector<int>A;
+	vector<int>B;
+	string a, b;
+	cin >> a >> b;
+	for (int i = a.length() - 1; i >= 0; i--) {
+		A.push_back(a[i] - '0'); //要从个位开始存入
+	}
+	for (int i = b.length() - 1; i >= 0; i--) {
+		B.push_back(b[i] - '0');
+	}
+ 
+	vector<int>C = add(A, B);
+	for (auto i : C) {
+		cout << i;
+	}
+ 
+	return 0;
+}

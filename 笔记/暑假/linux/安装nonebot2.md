@@ -1,0 +1,2 @@
+- root@ad09e240f82d:/# apt install python3-pip
+- root@ad09e240f82d:/# pip install pip install nb_cli

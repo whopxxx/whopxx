@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1010;
+const int mod = 998244353;
+int q[N];
+int g[N][N];
+int ma[N][N],mi[N][N];
+int maa[N][N],mii[N][N];
+int n,m,a,b;
+
+
+void work1(){
+    for(int i = 1; i <= n ; i++){
+        int hh = 0,tt = -1;
+        for(int j = 1; j <= m ; j++){
+            if(hh <= tt && q[hh] <= j - b)hh++;
+            while(hh <= tt && g[i][q[tt]] <= g[i][j])tt--;
+            q[++tt] = j;
+            if(j >= b) ma[i][j] = g[i][q[hh]];
+        }
+    }
+    for(int i = 1; i <= n ; i++){
+        int hh = 0,tt = -1;
+        for(int j = 1; j <= m ; j++){
+            if(hh <= tt && q[hh] <= j - b)hh++;
+            while(hh <= tt && g[i][q[tt]] >= g[i][j])tt--;
+            q[++tt] = j;
+            if(j >= b)mi[i][j] = g[i][q[hh]];
+        }
+    }
+}
+
+
+void work2(){
+    for(int j = 1; j <= m ; j++){
+        int hh = 0,tt = -1;
+        for(int i = 1; i <= n ; i++){
+            if(hh <= tt && q[hh] <= i - a)hh++;
+            while(hh <= tt && ma[q[tt]][j] <= ma[i][j])tt--;
+            q[++tt] = i;
+            if(j >= b && i >= a)maa[i][j] = ma[q[hh]][j];
+        }
+    }
+    for(int j = 1; j <= m ; j++){
+        int hh = 0,tt = -1;
+        for(int i = 1; i <= n ; i++){
+            if(hh <= tt && q[hh] <= i - a)hh++;
+            while(hh <= tt && mi[q[tt]][j] >= mi[i][j])tt--;
+            q[++tt] = i;
+            if(j >= b && i >= a)mii[i][j] = mi[q[hh]][j];
+        }
+    }
+}
+
+int main(){
+    // memset(ma,-1,sizeof ma);        
+    // memset(mi,0x3f,sizeof mi);
+    cin >> n >> m >> a >> b;    
+    for(int i = 1; i <= n ; i++){
+        for(int j = 1; j <= m ; j++){
+            cin >> g[i][j];
+        }
+    }
+    work1();
+    work2();
+    long long res = 0;
+    for(int i = 1; i <= n ; i++){
+        for(int j = 1; j <= m; j++){
+            res = (res + 1LL * maa[i][j] * mii[i][j])%mod;
+        }
+    }
+    cout << res % mod << endl;
+    return 0;
+}

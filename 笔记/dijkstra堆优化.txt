@@ -1,0 +1,56 @@
+//单源最短路——堆优化dijkstra O(n^2)
+//dis[1] = 0,dis[i] = inf;  起点是1
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 100010;
+using pii = pair<int,int>;
+int n,m;
+
+int h[N],e[N],w[N],ne[N],cnt;//链式前向星
+void add(int a,int b,int c){
+    e[cnt] = b,w[cnt] = c,ne[cnt] = h[a],h[a] = cnt++;
+}
+void init(){
+    memset(h,-1,sizeof h);
+}
+
+int dist[N];//记录距离
+bool vis[N];
+int dijkstra(){
+    memset(dist,0x3f,sizeof dist);
+    dist[1] = 0;
+    //用小根堆，堆顶维护为已确定的点的最小距离
+    priority_queue<pii,vector<pii>,greater<pii>>heap;//小根堆
+    heap.push({0,1});//记录距离和点,排序需求,距离放第一位
+    while(heap.size()){
+        auto t = heap.top();
+        heap.pop();
+        int dis = t.first,id = t.second;
+        if(vis[id])continue;//当前点的最短距离是否确定
+        vis[id] = true;//下来要确定id连接下的最短距离
+        for(int i = h[id]; ~i; i = ne[i]){
+            int j = e[i];
+            if(dist[j] > dis + w[i]){/*如果从1到j的代价大于从1
+            到t再到j就更新并把j的结果加入小根堆*/
+                dist[j] = dis + w[i];
+                heap.push({dist[j], j});
+            }
+        }
+    }
+    return dist[n] == 0x3f3f3f3f ? -1 : dist[n];
+
+}
+
+
+int main(){
+    init();
+    scanf("%d%d",&n,&m);
+    while(m--){
+        int a,b,c;
+        scanf("%d%d%d",&a,&b,&c);
+        add(a,b,c);
+    }
+    printf("%d\n",dijkstra());
+
+    return 0;
+}

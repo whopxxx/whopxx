@@ -1,0 +1,52 @@
+namespace utils{
+using ll = long long;
+const ll mod = 1e9 + 7;
+const ll D = 131;
+vector<ll>p;
+void init(ll l){
+    p.resize(l + 1, 0); // 要给空间
+    p[0] = 1;
+    for(int i = 1; i <= l; i++){
+        p[i] = p[i - 1] * D % mod;
+    }
+}
+struct Hash{
+    vector<ll>vt;
+    Hash(string s){
+        vt.reserve(s.size()); // 空间优化，不超过n的情况不会扩容
+        ll v = 0;
+        for(char c:s){
+            v = (v * D + c) % mod;
+            vt.push_back(v);
+        }
+    }
+    ll val(){
+        return vt.back();
+    }
+    ll val(int l,int r){
+        if(l == 0)return vt[r]; // 要特判
+        return ((vt[r] - vt[l - 1] * p[r - l + 1] % mod) + mod) % mod; // 防止负数
+    }
+
+};
+}
+
+using utils::Hash;
+using utils::init;    
+class Solution {
+public:
+    int distinctEchoSubstrings(string text) {
+        init(3000);
+        auto h = Hash(text);
+        int n = text.size();
+        set<int>st;
+        for(int i = 0; i < n; i++){
+            for(int l = 0; i + l + 1 + l < n; l++){
+                int L = h.val(i ,i + l);
+                int R = h.val(i + l + 1,i + l + 1 + l);
+                if(L == R)st.insert(L);
+             }
+        }
+        return st.size();
+    }
+};

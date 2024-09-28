@@ -1,0 +1,34 @@
+/*
+首先，要明白对于任意的语言，都是 被除数 = 商 * 除数 + 余数
+对于余数出现负数的情况，我们的策略是将 
+余数-除数  商+1
+商加1 相当于给 多加一个除数 抵消减去的除数
+*/
+#include<bits/stdc++.h>
+using namespace std;
+
+
+void whp(int n,int m){
+    if(n == 0)return;
+    int t = n%m;
+    if(t < 0){
+        t -= m;n += m;
+    }
+    char c;
+    if(t >= 10){
+        c = 'A' + t - 10;
+    }
+    else c = t + '0';
+    whp(n/m,m);
+    cout << c;
+}
+
+int main(){
+    int n,m;
+    cin >> n >> m;
+    cout << n << '=';
+    whp(n,m);
+    cout<<"(base"<<m<< ')'<< endl;
+
+    return 0;
+}

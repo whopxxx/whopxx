@@ -1,0 +1,126 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+const int  N = 2e6 + 10;
+const int mod = 1e9 + 7;
+int fac[N],jv[N],inv[N];
+void com_init(int n){
+    jv[0] = fac[0] = 1;
+    for(int i = 1; i <= n; i++){
+        inv[i] = i == 1 ? 1 : (mod - mod / i) * inv[mod % i] % mod;
+        fac[i] = fac[i - 1] * i % mod;
+        jv[i] = jv[i - 1] * inv[i] % mod;
+    }
+}
+int com(int n,int m){
+    if(n < m || m < 0)return 0;
+    return fac[n] * jv[n - m] % mod * jv[m] % mod;
+}
+
+
+signed main(){
+    com_init(1e5);
+    cout << com(4,2) << endl;
+    return 0;
+}
+
+
+
+-----------------------------------------
+
+#include<iostream>
+using namespace std;
+using ll = long long;
+const ll p = 20100403;
+
+// ll qpow(ll a, ll b){
+//     ll ans = 1;
+//     while(b){
+//         if(b & 1)ans = ans*a%p;
+//         a = a*a%p;
+//         b >>= 1;
+//     }
+//     return ans;
+// }
+
+/*根据公式
+!!!C(n,m) = C(n - 1, m) + C(n - 1, m - 1);
+二维杨辉三角
+*/
+
+ll C1(ll n, ll m){
+    if(m == 0 || m == n)return 1;
+    return C1(n - 1,m) + C1(n - 1,m - 1);
+}
+
+//记忆化
+ll res[100][100];
+ll C2(int n,int m){
+    if(m == 0 || m == n)return 1;
+    if(res[n][m] != 0)return res[n][m];
+    return res[n][m] = C2(n - 1, m) + C2(n - 1, m - 1);
+}
+
+//二维杨辉三角 可以预处理
+const int N = 10010;
+const it mod = 1e9 + 7;
+int C[N][N];
+void getC(){
+    for(int i = 0; i < N ;i++){
+        for(int j = 0; j <= i ; j++){
+            if(j == 0)C[i][j] = 1;
+            else C[i][j] = (C[i - 1][j] + C[i - 1][j - 1])%mod;
+        }
+    }
+}  
+
+int main(){
+    ll n ,m;
+    cin >>n >> m;
+    cout <<C1(n,m)<<endl;
+    cout <<C2(n,m)<<endl;    
+    return 0;
+}
+
+
+
+
+//用逆元求 当数很大时
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int N =100010;
+int mod = 1e9 + 7;
+int f[N],fi[N];
+
+int ksm(int a, int b){
+    int ans = 1;
+    while(b){
+        if(b & 1)ans = ans * a % mod;
+        a = a * a % mod;
+        b >>= 1;
+    }
+    return ans;
+}
+
+
+void init(){
+    f[0] = fi[0] = 1;
+    for(int i = 1; i < N ;i++){
+        f[i] = f[i - 1] * i % mod;
+        fi[i] = fi[i - 1] * ksm(i,mod - 2) % mod;
+    }
+}
+
+int C(int n,int m){
+    if(n < m)return 0;
+    return f[n] * fi[n - m] % mod * fi[m] % mod;
+}
+
+int main(){
+    init();
+    // int a= 5,b =2;
+    // cout << (ll)f[a]*fi[a - b]%mod*fi[b]%mod;
+    cout << C(5, 2) << endl;
+    return 0;
+}

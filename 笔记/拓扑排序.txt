@@ -1,0 +1,52 @@
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+#include<queue>
+using namespace std;
+
+const int N = 100010;
+int n,m;
+int a[N],k;
+int h[N],to[N],nx[N],d[N],cnt;
+void add(int u,int v){
+    to[cnt] = v;nx[cnt] = h[u];
+    h[u] = cnt++;
+    d[v]++;//入度加一
+}
+
+
+//下面是拓扑排序
+
+bool topsort(){
+    queue<int>q;
+    for(int i = 1; i <= n; i++){
+        if(d[i] == 0)q.push(i);//寻找入度为零的点加入
+    }
+    while(q.size()){
+        int t = q.front();q.pop();
+        a[++k] = t;//记录下拓扑排序,k为拓扑排序中有多少点
+        for(int i = h[t]; ~i; i = nx[i]){
+            int j = to[i];
+            if(--d[j] == 0)q.push(j);
+        }
+    }
+    return k == n;
+}
+
+int main(){ 
+    memset(h, -1, sizeof h);
+    cin >> n >> m;
+    for(int i = 0; i <m ;i++){
+        int a,b;
+        cin >> a >> b;
+        add(a,b);
+    }
+    if(topsort()){
+        for(int i = 1; i <= n ; i++){
+            cout << a[i] << " ";
+        }
+    }
+    else cout << -1 << endl;
+
+    return 0;
+}

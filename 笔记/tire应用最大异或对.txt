@@ -1,0 +1,65 @@
+#include<bits/stdc++.h>
+using namespace std;
+// #define x first
+// #define y second
+#define IOS ios::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+#define Y() puts("Yes")
+#define N() puts("No")
+#define endl '\n'
+using ll = long long;
+using ull = unsigned long long;
+using pii = pair<int,int>;
+const int N = 1e5 + 10, M = 3100000;
+const int mod = 1e9 + 7;
+int son[N][2],idx;
+int a[N];
+void insert(int x){
+    int p = 0;
+    for(int i = 31; ~i; i--){
+        int u = (x >> i) & 1;
+        if(!son[p][u])son[p][u] = ++idx;
+        p = son[p][u];
+    }
+}
+
+int ask(int x){
+    int p = 0,res = 0;
+    for(int i = 31; ~i; i--){
+        int u = (x >> i) & 1;
+        if(son[p][!u]){
+            res += 1 << i;
+            p = son[p][!u];
+        }
+        else {
+            res += 0 << i;
+            p = son[p][u];
+        }
+    }
+    return res;
+}
+
+
+void solve(){
+    int n;cin >> n;
+    for(int i = 1; i <= n ; i++){
+        cin >> a[i];
+        insert(a[i]);
+    }
+    int ans = 0;
+    for(int i = 1; i <= n ; i++){
+        ans = max(ans,ask(a[i]));
+    }
+    cout << ans << endl;
+
+
+}
+
+int main(){
+    int _;
+    _ = 1;
+    //cin >> _ ;
+    while( _ --){
+        solve();
+    }
+    return 0;
+}

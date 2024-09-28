@@ -1,0 +1,28 @@
+int h[N],e[N],w[N],ne[N],cnt;//链式前向星
+void add(int a,int b,int c){
+    e[cnt] = b,w[cnt] = c,ne[cnt] = h[a],h[a] = cnt++;
+}
+void init(){
+    memset(h,-1,sizeof h);
+}
+
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 500010,M = N*2;
+
+int h[N],e[M],ne[M],cnt;
+void add(int a,int b){
+    e[cnt] = b,ne[cnt] = h[a],h[a] = cnt++;
+}
+
+
+
+int main(){
+    //初始化
+    memset(h,-1,sizeof h);
+    
+    
+
+    return 0;
+}
+

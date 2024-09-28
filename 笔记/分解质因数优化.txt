@@ -1,0 +1,77 @@
+//洛谷 细胞分裂
+
+#include<bits/stdc++.h>
+using namespace std;
+#define IOS ios::sync_with_stdio(0);cin.tie(0);cout.tie(0)
+const int N = 300010;
+using ll = long long;
+struct P{
+    ll num,sum;
+};
+ll n,a,b;
+ll p[N];
+
+int primes[N], cnt;
+bool st[N];
+//处理质数
+void get_primes(int n){
+    for (int i = 2; i <= n; i ++ ){
+        if (!st[i]) primes[cnt ++ ] = i;
+        for (int j = 0; primes[j] <= n / i; j ++ ){
+            st[primes[j] * i] = true;
+            if (i % primes[j] == 0) break;
+        }
+    }
+}
+
+vector<P> whp(ll x){
+    vector<P>w;
+     for (int i = 0; primes[i] <= x / primes[i]; i ++ ){
+        int p = primes[i];
+        if (x % p == 0)
+        {
+            int s = 0;
+            while (x % p == 0) s ++, x /= p;
+            w.push_back({p,s});
+        }
+    }
+    if(x > 1)w.push_back({x,1});
+    return w;
+}
+
+ll ceil(ll a,ll b){
+    return (a + b - 1)/b;
+}
+
+int main(){
+    IOS;
+    get_primes(N - 1);
+    cin >> n >> a >> b;
+    for(int i = 1; i <= n; i++) cin >> p[i];
+    vector<P>k = whp(a);
+    if(a == 1){
+        cout << 0 << endl;
+        return 0;
+    }
+    for(auto &i: k)i.sum *= b;
+    ll ans = 5e9;
+    for(int i = 1; i <= n; i++){
+        vector<P>t = whp(p[i]);
+        ll j = 0,res = -1,f = 1;
+        for(auto [x,y]:k){
+            while(j < t.size() && t[j].num < x)j++;
+            if(j < t.size() && t[j].num == x)res = max(ceil(y,t[j].sum),res);
+            else {
+                f = 0;
+                break;
+            }
+        }
+        if(f){
+            ans = min(ans,res);
+        }
+    }
+    if(ans == 5e9)cout << -1 << endl;
+    else cout << ans << endl;
+
+    return 0;
+}

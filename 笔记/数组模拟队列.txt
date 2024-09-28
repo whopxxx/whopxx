@@ -1,0 +1,47 @@
+//数组模拟队列
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 10010;
+int h[N],e[N],ne[N],cnt;
+void init(){
+    memset(h,-1,sizeof h);
+}
+void add(int u,int v){
+    e[cnt] = v;ne[cnt] = h[u];
+    h[u] = cnt++;
+}
+int n,m;
+int q[N];
+int d[N];
+int bfs(){
+    int hh = 0,tt = -1;
+    q[++tt] = 1;//加入队列
+    memset(d,-1,sizeof d);
+    d[1] = 0;
+    while(hh <= tt){//hh <= tt 相当于队列非空
+        int t = q[hh];//队首元素
+        hh++;//弹出
+        for(int i = h[t]; ~i; i = ne[i]){
+            int j = e[i];
+            if(d[j] == -1){
+                d[j]  = d[t] + 1;
+                q[++tt] = j;
+            }
+        }
+    }
+    return d[n];//第n层
+}
+
+
+int main(){
+    init();
+    cin >> n >> m;
+    for(int i = 1; i <=m ;i++){
+        int a,b;
+        cin >> a >> b;
+        add(a,b);
+    }
+    cout << bfs()<<endl;
+
+    return 0;
+}

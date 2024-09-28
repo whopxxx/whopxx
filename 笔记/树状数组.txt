@@ -1,0 +1,22 @@
+class BitTree {
+    public:
+	vector<int> tree;
+	int n;
+    BitTree(int _n) : n(_n) {
+	    tree.resize(n+1);
+	    fill(tree.begin(),tree.end(),0);
+	}
+	inline int lowbit(int x) { return x&-x; }
+	inline void Modify(int x,int v) {
+		for(;x<=n;x+=lowbit(x)) tree[x]+=v;
+	}
+	inline int q(int x) {
+		int ret=0;
+		if(x<=0) return 0;
+		for(;x;x-=lowbit(x)) ret+=tree[x];
+		return ret;
+	}
+	inline int Query(int l,int r) {
+		return q(r)-q(l-1);
+	}
+};

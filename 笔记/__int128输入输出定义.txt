@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+const int N = 100;
+
+using ull =  unsigned long long;
+ull C[N][N];
+__int128 ans;
+
+//好像_int128是需要重新定义读入输出的
+inline __int128 read() {
+    __int128 x = 0, f = 1; char ch = getchar();
+    while (ch > '9' || ch < '0') { if (ch == '-')f = -1; ch = getchar(); }
+    while (ch >= '0' && ch <= '9') { x = x * 10 + ch - '0'; ch = getchar(); }
+    return x * f;
+}
+inline void write(__int128 x) {
+    if (x < 0) { putchar('-'); x = -x; }
+    if (x > 9)write(x / 10);
+    putchar(x % 10 + '0');
+}//前面都是读入和输出
+
+
+
+
+__int128 C2(int n,int m){
+    if(m == 0 || m == n)return 1;
+    if(C[n][m] != 0)return C[n][m];
+    return C[n][m] = C2(n - 1, m) + C2(n - 1, m - 1);
+}
+
+
+int main(){
+    int n,a,b;
+    cin >> n >> a >> b;
+    for(int i = 0; i <= a; i++){
+        for(int j = 0; j <= b; j++){
+            ans += C2(n + i - 1, n - 1) * C2(n + j - 1,n - 1);
+        }
+    }
+    write(ans);
+
+    return 0;
+}

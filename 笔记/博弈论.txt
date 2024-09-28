@@ -1,0 +1,42 @@
+//1.nim游戏 几堆石子轮流取
+#include<iostream>
+using namespace std;
+int main(){
+    int t;
+    cin >> t;
+    while(t--){
+        int n; 
+        cin >> n;
+        int res = 0;
+        while(n--){
+            int x;cin >> x;
+            res ^= x;
+        }
+        if(res)puts("Yes");
+        else puts("No");
+    }
+    return 0;
+}
+/*
+必胜态 必败态
+*/
+
+sg()函数 sg[i] = mex{sg[y1],sg[y2],sg[y3]...}其中不存在的最小自然数 
+有向图
+
+int f[N];
+//memset(f,-1,sizeof f);
+int sg(int x){
+    if(f[x] != -1)return f[x];
+
+    unordered_set<int>S;
+    for(int i = 0 ; i < m; i++){//m是可选方案数
+        int sum = s[i];
+        if(x >= sum)S.insert(sg(x - sum));
+    }
+    for(int i = 0; ; i++){
+        if(!S.count(i)){
+            return f[x] = i;
+        }
+    }
+}

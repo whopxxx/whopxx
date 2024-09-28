@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+const int mod = 1e9 + 7;
+struct T{
+    ll c[110][110];
+};
+ll n,k;
+T operator *(const T&A,const T&B){
+    T whp;
+    memset(whp.c,0,sizeof whp.c);
+    for(ll i = 1; i <= n; i++){
+        for(ll j = 1; j <= n ; j++){
+            for(ll k = 1; k <= n; k++){
+                whp.c[i][j] = (whp.c[i][j] +  A.c[i][k]%mod * B.c[k][j]%mod)%mod;
+            }
+        }
+    }
+    return whp;
+}
+
+
+int main(){
+    cin >> n >> k;
+    T A;
+    for(ll i = 1; i <= n; i++){
+        for(ll j = 1; j <= n ; j++){
+            cin >> A.c[i][j];
+        }
+    }
+    
+    T ans;
+    memset(ans.c,0,sizeof ans.c);
+    for(ll i = 1; i<= n ; i++)ans.c[i][i] = 1;
+    
+    while(k){
+        if(k & 1){
+            ans = ans * A;
+        }
+        A = A*A;
+        k >>= 1;
+    }
+    for(ll i = 1; i <= n; i++){
+        for(ll j = 1; j <= n ; j++){
+            cout << ans.c[i][j] << " ";
+        }
+        puts("");
+    }
+
+    return 0;
+}

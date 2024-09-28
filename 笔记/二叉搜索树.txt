@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+//二叉搜索树
+using namespace std;
+const int N = 100010;
+
+struct node{
+    int val,l,r,w;//val节点值,lr左右节点下标,w重复统计
+};
+node t[N];
+int a[N];//存数字
+int cnt = 1;//统计节点位置
+void insert(int o, int val){
+    if(!t[o].val){t[o].val = val;t[o].w++;return;}//当前为空
+    if(t[o].val == val){t[o].w++;return;}//重复值加入
+    //开始分类
+    if(t[o].val < val){//在右子树
+        if(!t[o].r)t[o].r = ++cnt;//++cnt是创建新的节点时加入的下标
+        insert(t[o].r, val);//递归查找位置
+    }
+    if(t[o].val > val){//同理
+        if(!t[o].l)t[o].l = ++cnt;
+        insert(t[o].l, val);
+    }
+}
+
+void dfsz(int root){
+    if(!t[root].val)return;
+    dfsz(t[root].l);
+    for(int i = 1; i <= t[root].w; i++)//重复情况的输出
+        printf("%d ", t[root].val);
+    dfsz(t[root].r);
+}
+
+
+int main(){
+    int n;
+    cin >> n;
+    for(int i = 1;i <= n ;i++){
+        scanf("%d",a + i);
+    }
+    for(int i = 1;i <= n ;i++){
+        insert(1, a[i]);
+    }
+    dfsz(1);
+    return 0;
+}

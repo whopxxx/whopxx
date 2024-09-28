@@ -1,0 +1,60 @@
+#include<iostream>
+using namespace std;
+
+const int N = 1000010;
+int a[N],q[N];//q[i]存下标模拟双向队列
+int tail = -1,head = 0;
+
+int main(){
+    int n,k;
+    cin >> n >> k;//k->窗口大小
+    for(int i = 0; i < n ;i++)cin >> a[i];
+    //维护最小值
+    for(int i = 0; i < n ;i++){
+        if(head <= tail && q[head] < i - k + 1)head++;//队列为空或超出窗口范围
+        while(head <= tail && a[q[tail]] >= a[i])tail--;//循环除
+        q[++tail] = i;
+        if(i - k + 1 >= 0)cout << a[q[head]] << " ";
+    }
+    puts("");
+    head = 0;tt = -1;
+    //维护最大值 对称即可
+    for(int i = 0; i < n ;i++){
+        if(head <= tail && q[head] < i - k + 1)head++;//队列为空或超出窗口范围
+        while(head <= tail && a[q[tail]] <= a[i])tail--;//循环除 这里改变维护的值
+        q[++tail] = i;
+        if(i - k + 1 >= 0)cout << a[q[head]] << " ";
+    }
+    puts("");
+    return 0;
+}
+
+
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 100010;
+int a[N],q[N];
+int main(){
+    int n,k;
+    cin >> n >> k;
+    for(int i = 1; i <= n ; i++){
+        cin >> a[i];
+    }
+    int hh = 0,tt = -1;
+    for(int i = 1; i <= n; i++){
+        if(hh <= tt && q[hh] <= i - k)hh++;
+        while(hh <= tt && a[q[tt]] >= a[i])tt--;
+        q[++tt] = i;
+        if(i >= k)cout << a[q[hh]] << ' ';
+    }
+    puts("");
+    hh = 0,tt = -1;
+    for(int i = 1; i <= n; i++){
+        if(hh <= tt && q[hh] <= i - k)hh++;
+        while(hh <= tt && a[q[tt]] <= a[i])tt--;
+        q[++tt] = i;
+        if(i >= k)cout << a[q[hh]] << ' ';
+    }
+    puts("");
+    return 0;
+}

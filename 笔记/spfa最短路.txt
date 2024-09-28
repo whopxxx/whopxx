@@ -1,0 +1,65 @@
+//单源最短路——spfa O(m ~ n * m)
+//可能会被卡
+//dis[1] = 0,dis[i] = inf;  起点是1
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 100010;
+using pii = pair<int,int>;
+int n,m;
+
+int h[N],e[N],w[N],ne[N],cnt;//链式前向星
+void add(int a,int b,int c){
+    e[cnt] = b,w[cnt] = c,ne[cnt] = h[a],h[a] = cnt++;
+}
+void init(){
+    memset(h,-1,sizeof h);
+    cnt = 0;
+}
+
+int dist[N];//记录距离
+bool se[N];
+int spfa(){
+    memset(dist,0x3f,sizeof dist);
+    dist[1] = 0;
+    queue<int>q;//用队列存储需要更新的值
+    q.push(1);
+    se[1] = 1;//vis[i]表示i在队列中
+    while(q.size()){
+        int t = q.front();
+        q.pop();
+        se[t] = 0;
+        for(int i = h[t];i != -1; i = ne[i]){
+            int j = e[i];
+            if(dist[j] > dist[t] + w[i]){//只有当前的点变小，后续的点才有可能变小
+                dist[j] = dist[t] + w[i];
+                if(!se[i]){
+                    q.push(j);//加入待更新的点
+                    se[j] = 1;
+                }
+            }
+        }
+    }
+    return dist[n] == 0x3f3f3f3f ? -1 : dist[n];
+}
+
+
+int main(){
+    init();
+    scanf("%d%d",&n,&m);
+    while(m--){
+        int a,b,c;
+        scanf("%d%d%d",&a,&b,&c);
+        add(a,b,c);
+    }
+    printf("%d\n",spfa());
+
+    return 0;
+}
+/*
+3 3
+1 2 2
+2 3 1
+1 3 4
+
+3
+*/

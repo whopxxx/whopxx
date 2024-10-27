@@ -1,3 +1,35 @@
+#define MOD ((int) 1e9 + 7)
+
+// 矩阵快速幂模板开始
+
+struct Matrix {
+    int n, m;
+    long long A[26][26];
+
+    Matrix(int n, int m): n(n), m(m) { memset(A, 0, sizeof(A)); }
+
+    Matrix operator*(const Matrix &o) const {
+        Matrix r(n, o.m);
+        for (int k = 0; k < m; k++) for (int i = 0; i < n; i++) for (int j = 0; j < o.m; j++)
+            r.A[i][j] = (r.A[i][j] + A[i][k] * o.A[k][j]) % MOD;
+        return r;
+    }
+};
+
+Matrix power(Matrix a, long long b) {
+    Matrix y(a.n, a.m);
+    for (int i = 0; i < y.n; i++) y.A[i][i] = 1;
+    for (; b; b >>= 1) {
+        if (b & 1) y = y * a;
+        a = a * a;
+    }
+    return y;
+}
+
+// 矩阵快速幂模板结束
+
+----------------------------------------------------------------------------------------------------------------------------------
+
 #include<bits/stdc++.h>
 using namespace std;
 using ll = long long;
